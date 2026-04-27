@@ -8,6 +8,6 @@ workflows:
       - name: Build IPA
         script: |
           cd musicapp
-          flutter build ipa --release
+          flutter build ipa --release --no-codesign
     artifacts:
       - musicapp/build/ios/ipa/*.ipa
