@@ -1,0 +1,12 @@
+workflows:
+  ios-workflow:
+    name: SurfaceMusic iOS
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Build IPA
+        script: |
+          flutter build ipa --release
+    artifacts:
+      - build/ios/ipa/*.ipa
