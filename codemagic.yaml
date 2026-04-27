@@ -11,3 +11,6 @@ workflows:
           flutter build ipa --release --no-codesign
     artifacts:
       - musicapp/build/ios/ipa/*.ipa
+      - musicapp/build/ios/archive/*.xcarchive
+      - "**/*.ipa"
+      - "**/*.app"
