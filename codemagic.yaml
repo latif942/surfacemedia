@@ -1,16 +1,21 @@
 workflows:
-  ios-workflow:
-    name: SurfaceMusic iOS
-    instance_type: mac_mini_m2
+  ios-ipa:
+    name: SurfacePlayer IPA
+    max_build_duration: 60
     environment:
       flutter: stable
+      xcode: latest
+      cocoapods: default
+
     scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+
+      - name: Install pods
+        script: find . -name "Podfile" -execdir pod install \;
+
       - name: Build IPA
-        script: |
-          cd musicapp
-          flutter build ipa --release --no-codesign
+        script: flutter build ipa --release --no-codesign
+
     artifacts:
-      - musicapp/build/ios/ipa/*.ipa
-      - musicapp/build/ios/archive/*.xcarchive
-      - "**/*.ipa"
-      - "**/*.app"
+      - build/ios/ipa/*.ipa
