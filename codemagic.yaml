@@ -12,10 +12,16 @@ workflows:
         script: flutter pub get
 
       - name: Install pods
-        script: find . -name "Podfile" -execdir pod install \;
+        script: |
+          cd ios && pod install
 
       - name: Build IPA
-        script: flutter build ipa --release --no-codesign
+        script: |
+          flutter build ios --release --no-codesign
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r app.ipa Payload
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ios/iphoneos/app.ipa
