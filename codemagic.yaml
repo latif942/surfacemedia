@@ -1,6 +1,6 @@
 workflows:
   ios-ipa:
-    name: SurfacePlayer IPA
+    name: SurfacePlayer
     max_build_duration: 60
     environment:
       flutter: stable
@@ -21,7 +21,7 @@ workflows:
           cd build/ios/iphoneos
           mkdir -p Payload
           cp -r Runner.app Payload/
-          zip -r app.ipa Payload
+          zip -r SurfacePlayer.ipa Payload
 
     artifacts:
       - build/ios/iphoneos/app.ipa
