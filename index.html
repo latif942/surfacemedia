@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surface Media</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#06000F;--card:#0E0020;--cardhi:#18003A;
+    --purple:#6D1FFF;--violet:#9B30FF;--neon:#C47FFF;
+    --pink:#E040FB;--white:#EDE8FF;--dim:#5E4D75;
+    --glass:rgba(255,255,255,.055);--border:rgba(255,255,255,.1);
+    --success:#4DFFA0
+  }
+  body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+  /* grain overlay */
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.028;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:200px}
+
+  /* orbs */
+  .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(1px)}
+  .orb1{width:700px;height:700px;top:-200px;right:-220px;
+    background:radial-gradient(circle,rgba(109,31,255,.15),transparent 68%);
+    animation:breathe 9s ease-in-out infinite alternate}
+  .orb2{width:500px;height:500px;bottom:-160px;left:-160px;
+    background:radial-gradient(circle,rgba(224,64,251,.1),transparent 68%);
+    animation:breathe 7s ease-in-out infinite alternate-reverse}
+  .orb3{width:300px;height:300px;top:50%;left:40%;transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(155,48,255,.06),transparent 70%);
+    animation:breathe 11s ease-in-out infinite alternate}
+  @keyframes breathe{0%{transform:scale(1)}100%{transform:scale(1.2)}}
+
+  .wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:52px 24px 100px}
+
+  /* header */
+  header{text-align:center;margin-bottom:52px}
+  .logo{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;letter-spacing:-2px;
+    background:linear-gradient(135deg,#fff 0%,var(--neon) 40%,var(--pink) 80%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    filter:drop-shadow(0 0 30px rgba(155,48,255,.4))}
+  .tagline{color:var(--dim);font-size:12px;margin-top:8px;letter-spacing:1.2px;text-transform:uppercase;font-weight:500}
+
+  /* proxy notice */
+  .proxy-notice{background:rgba(77,255,160,.05);border:1px solid rgba(77,255,160,.2);border-radius:14px;
+    padding:12px 18px;margin-bottom:24px;font-size:12px;color:rgba(77,255,160,.8);display:flex;align-items:center;gap:10px}
+  .proxy-notice::before{content:'✦';font-size:14px;color:var(--success)}
+
+  /* userhash */
+  .hash-row{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+  .hash-label{font-size:11px;color:var(--dim);white-space:nowrap;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+  .hash-row input{flex:1;background:var(--glass);border:1px solid var(--border);border-radius:12px;
+    padding:11px 16px;color:var(--white);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+  .hash-row input::placeholder{color:var(--dim)}
+  .hash-row input:focus{border-color:rgba(155,48,255,.55);box-shadow:0 0 0 3px rgba(155,48,255,.08)}
+
+  /* drop zone */
+  .drop-zone{border:2px dashed var(--border);border-radius:28px;background:var(--glass);
+    backdrop-filter:blur(14px);padding:64px 32px;text-align:center;cursor:pointer;
+    transition:all .3s;position:relative;overflow:hidden}
+  .drop-zone::before{content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% -10%,rgba(109,31,255,.25),transparent 65%);
+    opacity:0;transition:opacity .35s}
+  .drop-zone:hover::before,.drop-zone.drag::before{opacity:1}
+  .drop-zone.drag{border-color:var(--violet);box-shadow:0 0 50px rgba(109,31,255,.25),inset 0 0 30px rgba(109,31,255,.07)}
+  .drop-icon{font-size:52px;display:block;margin-bottom:18px;filter:drop-shadow(0 0 24px var(--violet));
+    animation:float 3.5s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .drop-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;margin-bottom:8px}
+  .drop-sub{font-size:13px;color:var(--dim)}
+  .drop-btn{display:inline-block;margin-top:24px;padding:13px 34px;
+    background:linear-gradient(135deg,var(--purple),var(--violet) 50%,var(--pink));
+    border:none;border-radius:50px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+    box-shadow:0 0 32px rgba(109,31,255,.5);transition:transform .15s,box-shadow .15s}
+  .drop-btn:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(109,31,255,.65)}
+  input[type=file]{display:none}
+  .size-warn{font-size:12px;color:rgba(224,64,251,.85);text-align:center;margin-top:12px;display:none}
+
+  /* progress */
+  .prog-wrap{margin-top:28px;display:none;animation:fadeup .3s ease}
+  .prog-wrap.show{display:block}
+  .prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:10px;font-weight:500}
+  .prog-track{height:5px;background:rgba(255,255,255,.07);border-radius:50px;overflow:hidden}
+  .prog-fill{height:100%;width:0%;border-radius:50px;
+    background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));
+    transition:width .3s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 0 16px var(--violet)}
+  .prog-status{font-size:13px;text-align:center;margin-top:12px;font-weight:600;color:var(--neon);min-height:20px}
+
+  /* result */
+  .result-box{margin-top:20px;padding:16px 20px;background:rgba(109,31,255,.1);
+    border:1px solid rgba(155,48,255,.3);border-radius:18px;display:none;align-items:center;gap:12px;animation:fadeup .3s ease}
+  .result-box.show{display:flex}
+  @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .result-url{flex:1;font-size:12px;color:var(--neon);word-break:break-all;font-family:monospace}
+  .copy-btn{padding:8px 20px;background:var(--glass);border:1px solid var(--border);border-radius:50px;
+    color:var(--white);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;
+    transition:all .2s;font-family:'DM Sans',sans-serif}
+  .copy-btn:hover{background:var(--violet);border-color:var(--violet)}
+  .copy-btn.copied{background:rgba(77,255,160,.12);border-color:rgba(77,255,160,.35);color:var(--success)}
+
+  /* history */
+  .files-section{margin-top:56px}
+  .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.2px}
+  .clear-btn{font-size:11px;color:var(--dim);background:none;border:none;cursor:pointer;
+    padding:4px 8px;transition:color .2s;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.6px}
+  .clear-btn:hover{color:var(--pink)}
+  .file-list{display:flex;flex-direction:column;gap:10px}
+  .file-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--glass);
+    border:1px solid var(--border);border-radius:18px;backdrop-filter:blur(8px);
+    transition:border-color .2s,background .2s;animation:fadeup .3s ease}
+  .file-item:hover{border-color:rgba(155,48,255,.35);background:rgba(255,255,255,.07)}
+  .file-ico{width:40px;height:40px;border-radius:10px;background:rgba(109,31,255,.2);
+    display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .file-info{flex:1;min-width:0}
+  .file-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .file-meta{font-size:11px;color:var(--dim);margin-top:3px}
+  .file-actions{display:flex;gap:7px;flex-shrink:0}
+  .pill-btn{padding:6px 13px;background:none;border:1px solid var(--border);border-radius:50px;
+    color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;
+    white-space:nowrap;font-family:'DM Sans',sans-serif}
+  .pill-btn:hover{border-color:var(--violet);color:var(--neon)}
+  .empty-state{text-align:center;padding:52px;color:var(--dim);font-size:13px}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="wrap">
+  <header>
+    <div class="logo">Surface Media</div>
+    <div class="tagline">Instant file hosting · Powered by Catbox.moe</div>
+  </header>
+
+  <div class="proxy-notice">
+    Shared proxy active — upload instantly, no setup required
+  </div>
+
+  <div class="hash-row">
+    <span class="hash-label">Userhash</span>
+    <input type="text" id="userhash" placeholder="Optional — leave blank for anonymous upload">
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <span class="drop-icon">📁</span>
+    <div class="drop-title">Drop your file here</div>
+    <div class="drop-sub">or click to browse — max 200 MB</div>
+    <button class="drop-btn" id="chooseBtn">Choose File</button>
+    <input type="file" id="fileInput">
+  </div>
+  <div class="size-warn" id="sizeWarn">⚠ File exceeds 200 MB — Catbox limit</div>
+
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-label"><span id="progFile"></span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-status" id="progStatus"></div>
+  </div>
+
+  <div class="result-box" id="resultBox">
+    <div class="result-url" id="resultUrl"></div>
+    <button class="copy-btn" id="copyBtn" onclick="copyResult()">Copy</button>
+  </div>
+
+  <div class="files-section">
+    <div class="section-head">
+      <span class="section-title">Recent Uploads</span>
+      <button class="clear-btn" onclick="clearHistory()">Clear all</button>
+    </div>
+    <div class="file-list" id="fileList"></div>
+  </div>
+</div>
+
+<script>
+// ← Replace with your Render service URL after deploy
+const PROXY = 'https://surface-media-proxy.onrender.com/upload';
+
+const MAX = 200 * 1024 * 1024, SK = 'surface_uploads';
+function getHistory(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch{return[]}}
+function saveHistory(h){localStorage.setItem(SK,JSON.stringify(h))}
+function clearHistory(){saveHistory([]);renderHistory()}
+function fileIcon(n){
+  const e=n.split('.').pop().toLowerCase();
+  if(['jpg','jpeg','png','gif','webp','avif','svg'].includes(e))return'🖼️';
+  if(['mp4','mov','avi','mkv','webm'].includes(e))return'🎬';
+  if(['mp3','wav','flac','ogg','aac','m4a'].includes(e))return'🎵';
+  if(['pdf'].includes(e))return'📄';
+  if(['zip','rar','7z','tar','gz'].includes(e))return'🗜️';
+  if(['doc','docx','txt','md'].includes(e))return'📝';
+  return'📎';
+}
+function fmtSize(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
+function fmtDate(ts){return new Date(ts).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function renderHistory(){
+  const h=getHistory(), list=document.getElementById('fileList');
+  if(!h.length){list.innerHTML='<div class="empty-state">No uploads yet</div>';return}
+  list.innerHTML=h.slice().reverse().map(f=>`
+    <div class="file-item">
+      <div class="file-ico">${fileIcon(f.name)}</div>
+      <div class="file-info">
+        <div class="file-name">${escHtml(f.name)}</div>
+        <div class="file-meta">${fmtSize(f.size)} · ${fmtDate(f.ts)}</div>
+      </div>
+      <div class="file-actions">
+        <button class="pill-btn" onclick="copyStr('${f.url}',this)">Copy</button>
+        <button class="pill-btn" onclick="window.open('${f.url}','_blank')">Open</button>
+      </div>
+    </div>`).join('');
+}
+function showProg(name){
+  document.getElementById('progWrap').classList.add('show');
+  document.getElementById('progFile').textContent=name;
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('progPct').textContent='0%';
+  document.getElementById('progStatus').textContent='';
+  document.getElementById('resultBox').classList.remove('show');
+  document.getElementById('sizeWarn').style.display='none';
+}
+function setProg(pct,status){
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=Math.round(pct)+'%';
+  if(status!==undefined)document.getElementById('progStatus').textContent=status;
+}
+function showResult(url){
+  document.getElementById('resultUrl').textContent=url;
+  document.getElementById('resultBox').classList.add('show');
+  setProg(100,'✦ Upload complete');
+}
+async function uploadFile(file){
+  if(file.size>MAX){document.getElementById('sizeWarn').style.display='block';return}
+  showProg(file.name);
+  const form=new FormData();
+  const hash=document.getElementById('userhash').value.trim();
+  if(hash)form.append('userhash',hash);
+  form.append('fileToUpload',file);
+  const xhr=new XMLHttpRequest();
+  xhr.open('POST',PROXY);
+  xhr.upload.onprogress=e=>{if(e.lengthComputable)setProg(e.loaded/e.total*94,'Uploading…')};
+  xhr.onload=()=>{
+    const url=xhr.responseText.trim();
+    if(url.startsWith('https://')){
+      showResult(url);
+      const h=getHistory();
+      h.push({name:file.name,size:file.size,url,ts:Date.now()});
+      if(h.length>60)h.shift();
+      saveHistory(h);renderHistory();
+    } else {
+      setProg(0,'✗ '+(xhr.responseText.slice(0,120)||'Unknown error'));
+    }
+  };
+  xhr.onerror=()=>setProg(0,'✗ Network error — proxy unreachable');
+  xhr.send(form);
+}
+async function copyStr(str,btn){
+  await navigator.clipboard.writeText(str);
+  if(btn){const o=btn.textContent;btn.textContent='Copied!';btn.style.color='var(--success)';setTimeout(()=>{btn.textContent=o;btn.style.color=''},1500)}
+}
+async function copyResult(){
+  await copyStr(document.getElementById('resultUrl').textContent);
+  const btn=document.getElementById('copyBtn');
+  btn.textContent='Copied!';btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},1500);
+}
+const dz=document.getElementById('dropZone');
+const fi=document.getElementById('fileInput');
+document.getElementById('chooseBtn').addEventListener('click',e=>{e.stopPropagation();fi.click()});
+dz.addEventListener('click',()=>fi.click());
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')});
+['dragleave','dragend'].forEach(ev=>dz.addEventListener(ev,()=>dz.classList.remove('drag')));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)uploadFile(f)});
+fi.addEventListener('change',e=>{if(e.target.files[0])uploadFile(e.target.files[0]);fi.value=''});
+renderHistory();
+</script>
+</body>
+</html>
